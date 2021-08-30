@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "module": "CommonJS",
+    "target": "es5",
+    "downlevelIteration": true,
+    "esModuleInterop": true,
+    "declaration": true,
+    "moduleResolution": "Node",
+    "lib": [
+      "es2016"
+    ]
+  },
+  "include": [
+    "pies"
+  ]
+}
