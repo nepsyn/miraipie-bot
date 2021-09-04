@@ -31,9 +31,9 @@ module.exports = (ctx) => {
                 .aliases(['p'])
                 .description('随机选择选项')
                 .usage('random pick <...choices>\nchoices表示选项, 至少有两个')
-                .action(async (args, chat) => {
+                .action(async (args, chat, chain, command) => {
                     if (args.length < 2) {
-                        await chat.send('随机选择的选项至少需要两个');
+                        await chat.send(command.help());
                         return;
                     }
                     await chat.send(args[Math.floor(Math.random() * args.length)]);

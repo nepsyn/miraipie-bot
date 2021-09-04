@@ -150,6 +150,29 @@ var Command = /** @class */ (function () {
         return this;
     };
     ;
+    /** 获取指令帮助信息 */
+    Command.prototype.help = function () {
+        var e_1, _a;
+        var helpText = this.description() + "\n" + this.usage();
+        var subCommands = [];
+        try {
+            for (var _b = __values(this.subCommands.values()), _c = _b.next(); !_c.done; _c = _b.next()) {
+                var sub = _c.value;
+                if (!sub._hide)
+                    subCommands.push(sub.bin + "  -  " + sub.description());
+            }
+        }
+        catch (e_1_1) { e_1 = { error: e_1_1 }; }
+        finally {
+            try {
+                if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
+            }
+            finally { if (e_1) throw e_1.error; }
+        }
+        if (subCommands.length > 0)
+            helpText += "\n\n\u5B50\u547D\u4EE4:\n" + subCommands.join('\n');
+        return helpText;
+    };
     Command.prototype.usage = function (usage) {
         if (!!usage) {
             this._usage = usage;
@@ -189,8 +212,8 @@ var Command = /** @class */ (function () {
      */
     Command.prototype.parse = function (args, chat, chain) {
         return __awaiter(this, void 0, void 0, function () {
-            var flag, _a, _b, command, e_1_1;
-            var e_1, _c;
+            var flag, _a, _b, command, e_2_1;
+            var e_2, _c;
             return __generator(this, function (_d) {
                 switch (_d.label) {
                     case 0:
@@ -217,14 +240,14 @@ var Command = /** @class */ (function () {
                         return [3 /*break*/, 2];
                     case 5: return [3 /*break*/, 8];
                     case 6:
-                        e_1_1 = _d.sent();
-                        e_1 = { error: e_1_1 };
+                        e_2_1 = _d.sent();
+                        e_2 = { error: e_2_1 };
                         return [3 /*break*/, 8];
                     case 7:
                         try {
                             if (_b && !_b.done && (_c = _a.return)) _c.call(_a);
                         }
-                        finally { if (e_1) throw e_1.error; }
+                        finally { if (e_2) throw e_2.error; }
                         return [7 /*endfinally*/];
                     case 8:
                         if (!flag) return [3 /*break*/, 10];
@@ -247,7 +270,7 @@ var Command = /** @class */ (function () {
      * @param bins
      */
     Command.prototype.find = function (bins) {
-        var e_2, _a;
+        var e_3, _a;
         if (bins.length > 0) {
             try {
                 for (var _b = __values(this.subCommands.values()), _c = _b.next(); !_c.done; _c = _b.next()) {
@@ -257,12 +280,12 @@ var Command = /** @class */ (function () {
                     }
                 }
             }
-            catch (e_2_1) { e_2 = { error: e_2_1 }; }
+            catch (e_3_1) { e_3 = { error: e_3_1 }; }
             finally {
                 try {
                     if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
                 }
-                finally { if (e_2) throw e_2.error; }
+                finally { if (e_3) throw e_3.error; }
             }
             return this;
         }
@@ -310,8 +333,8 @@ var CommandManager = /** @class */ (function () {
      */
     CommandManager.prototype.parse = function (command, chat, chain) {
         return __awaiter(this, void 0, void 0, function () {
-            var args, _a, _b, command_1, e_3_1;
-            var e_3, _c;
+            var args, _a, _b, command_1, e_4_1;
+            var e_4, _c;
             return __generator(this, function (_d) {
                 switch (_d.label) {
                     case 0:
@@ -335,14 +358,14 @@ var CommandManager = /** @class */ (function () {
                         return [3 /*break*/, 2];
                     case 5: return [3 /*break*/, 8];
                     case 6:
-                        e_3_1 = _d.sent();
-                        e_3 = { error: e_3_1 };
+                        e_4_1 = _d.sent();
+                        e_4 = { error: e_4_1 };
                         return [3 /*break*/, 8];
                     case 7:
                         try {
                             if (_b && !_b.done && (_c = _a.return)) _c.call(_a);
                         }
-                        finally { if (e_3) throw e_3.error; }
+                        finally { if (e_4) throw e_4.error; }
                         return [7 /*endfinally*/];
                     case 8: return [2 /*return*/];
                 }
@@ -354,7 +377,7 @@ var CommandManager = /** @class */ (function () {
      * @param bins 指令分段
      */
     CommandManager.prototype.find = function (bins) {
-        var e_4, _a;
+        var e_5, _a;
         if (bins.length > 0) {
             try {
                 for (var _b = __values(this.programs.values()), _c = _b.next(); !_c.done; _c = _b.next()) {
@@ -364,12 +387,12 @@ var CommandManager = /** @class */ (function () {
                     }
                 }
             }
-            catch (e_4_1) { e_4 = { error: e_4_1 }; }
+            catch (e_5_1) { e_5 = { error: e_5_1 }; }
             finally {
                 try {
                     if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
                 }
-                finally { if (e_4) throw e_4.error; }
+                finally { if (e_5) throw e_5.error; }
             }
             return null;
         }
@@ -406,46 +429,28 @@ module.exports = function (ctx) {
                 .description('显示帮助信息')
                 .usage('help [command]')
                 .action(function (args, chat, chain) { return __awaiter(_this, void 0, void 0, function () {
-                var command, messages, subCommands, _a, _b, sub, commands, _c, _d, program;
-                var e_5, _e, e_6, _f;
-                return __generator(this, function (_g) {
-                    switch (_g.label) {
+                var command, commands, _a, _b, program;
+                var e_6, _c;
+                return __generator(this, function (_d) {
+                    switch (_d.label) {
                         case 0:
                             if (!(args && args.length > 0)) return [3 /*break*/, 5];
                             command = exports.Program.find(args);
                             if (!command) return [3 /*break*/, 2];
-                            messages = [(0, miraipie_1.Plain)(command.description() + "\n" + command.usage())];
-                            subCommands = [];
-                            try {
-                                for (_a = __values(command.subCommands.values()), _b = _a.next(); !_b.done; _b = _a.next()) {
-                                    sub = _b.value;
-                                    if (sub.validate(chat, chain))
-                                        subCommands.push(sub.bin + "  -  " + sub.description());
-                                }
-                            }
-                            catch (e_5_1) { e_5 = { error: e_5_1 }; }
-                            finally {
-                                try {
-                                    if (_b && !_b.done && (_e = _a.return)) _e.call(_a);
-                                }
-                                finally { if (e_5) throw e_5.error; }
-                            }
-                            if (subCommands.length > 0)
-                                messages.push((0, miraipie_1.Plain)("\n\n\u5B50\u547D\u4EE4:\n" + subCommands.join('\n')));
-                            return [4 /*yield*/, chat.send(messages)];
+                            return [4 /*yield*/, chat.send(command.help())];
                         case 1:
-                            _g.sent();
+                            _d.sent();
                             return [3 /*break*/, 4];
-                        case 2: return [4 /*yield*/, chat.send("\u672A\u77E5\u7684\u547D\u4EE4, \u53D1\u9001 " + this.configs.prefix + "help \u67E5\u770B\u6307\u4EE4\u5E2E\u52A9")];
+                        case 2: return [4 /*yield*/, chat.send("\u672A\u77E5\u7684\u547D\u4EE4, \u53D1\u9001 " + this.configs.prefix + "help \u67E5\u770B\u6240\u6709\u6307\u4EE4")];
                         case 3:
-                            _g.sent();
-                            _g.label = 4;
+                            _d.sent();
+                            _d.label = 4;
                         case 4: return [3 /*break*/, 7];
                         case 5:
                             commands = [];
                             try {
-                                for (_c = __values(exports.Program.programs.values()), _d = _c.next(); !_d.done; _d = _c.next()) {
-                                    program = _d.value;
+                                for (_a = __values(exports.Program.programs.values()), _b = _a.next(); !_b.done; _b = _a.next()) {
+                                    program = _b.value;
                                     if (program.validate(chat, chain) && !program._hide) {
                                         commands.push("" + exports.Program.prefix + program.usage() + "  -  " + program.description());
                                     }
@@ -454,14 +459,14 @@ module.exports = function (ctx) {
                             catch (e_6_1) { e_6 = { error: e_6_1 }; }
                             finally {
                                 try {
-                                    if (_d && !_d.done && (_f = _c.return)) _f.call(_c);
+                                    if (_b && !_b.done && (_c = _a.return)) _c.call(_a);
                                 }
                                 finally { if (e_6) throw e_6.error; }
                             }
                             return [4 /*yield*/, chat.send("\u5F53\u524D\u52A0\u8F7D\u7684\u547D\u4EE4\u5217\u8868:\n" + commands.join('\n'))];
                         case 6:
-                            _g.sent();
-                            _g.label = 7;
+                            _d.sent();
+                            _d.label = 7;
                         case 7: return [2 /*return*/];
                     }
                 });

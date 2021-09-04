@@ -2,7 +2,7 @@ import { Chat, MessageChain } from 'miraipie';
 /** 指令验证器 */
 declare type Validator = (chat: Chat, chain: MessageChain) => boolean;
 /** 指令处理器 */
-declare type Action = (args: string[], chat: Chat, chain: MessageChain, program: Command) => any;
+declare type Action = (args: string[], chat: Chat, chain: MessageChain, command: Command) => any;
 export declare class Command {
     bin: string;
     parent: Command;
@@ -64,6 +64,8 @@ export declare class Command {
     description(): string;
     /** 在所有指令帮助中隐藏该指令 */
     hideOnHelp(): this;
+    /** 获取指令帮助信息 */
+    help(): string;
     /**
      * 获取或设置指令使用说明
      * @param usage 设置的指令使用说明, 不填则返回使用说明

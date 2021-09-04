@@ -1,9 +1,9 @@
-import {Chat, makePie, MessageChain, MiraiPieApplication, Plain} from 'miraipie';
+import {Chat, makePie, MessageChain, MiraiPieApplication} from 'miraipie';
 
 /** 指令验证器 */
 type Validator = (chat: Chat, chain: MessageChain) => boolean;
 /** 指令处理器 */
-type Action = (args: string[], chat: Chat, chain: MessageChain, program: Command) => any;
+type Action = (args: string[], chat: Chat, chain: MessageChain, command: Command) => any;
 
 export class Command {
     subCommands: Map<string, Command>;
@@ -108,6 +108,17 @@ export class Command {
         this._hide = true;
         return this;
     };
+
+    /** 获取指令帮助信息 */
+    help(): string {
+        let helpText = `${this.description()}\n${this.usage()}`
+        const subCommands = [];
+        for (const sub of this.subCommands.values()) {
+            if (!sub._hide) subCommands.push(`${sub.bin}  -  ${sub.description()}`);
+        }
+        if (subCommands.length > 0) helpText += `\n\n子命令:\n${subCommands.join('\n')}`;
+        return helpText;
+    }
 
     /**
      * 获取或设置指令使用说明
@@ -291,15 +302,9 @@ module.exports = (ctx: MiraiPieApplication) => {
                     if (args && args.length > 0) {
                         const command = Program.find(args);
                         if (command) {
-                            const messages = [Plain(`${command.description()}\n${command.usage()}`)];
-                            const subCommands = [];
-                            for (const sub of command.subCommands.values()) {
-                                if (sub.validate(chat, chain)) subCommands.push(`${sub.bin}  -  ${sub.description()}`);
-                            }
-                            if (subCommands.length > 0) messages.push(Plain(`\n\n子命令:\n${subCommands.join('\n')}`));
-                            await chat.send(messages);
+                            await chat.send(command.help());
                         } else {
-                            await chat.send(`未知的命令, 发送 ${this.configs.prefix}help 查看指令帮助`);
+                            await chat.send(`未知的命令, 发送 ${this.configs.prefix}help 查看所有指令`);
                         }
                     } else {
                         const commands = [];
