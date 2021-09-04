@@ -84,20 +84,42 @@ var RaceGame = /** @class */ (function () {
                         _a.label = 2;
                     case 2:
                         this.timeout = setTimeout(function () { return __awaiter(_this, void 0, void 0, function () {
+                            var _this = this;
                             return __generator(this, function (_a) {
                                 switch (_a.label) {
-                                    case 0: return [4 /*yield*/, this.chat.send("20s\u5185\u6CA1\u6709\u4EBA\u7B54\u51FA\u6B63\u786E\u7B54\u6848\uFF1A " + this.currentWord)];
+                                    case 0: return [4 /*yield*/, this.chat.send("\u63D0\u793A\uFF1A\u8BE5\u5355\u8BCD\u7684\u7B2C\u4E00\u4E2A\u5B57\u6BCD\u662F " + this.currentWord[0])];
                                     case 1:
                                         _a.sent();
-                                        this.round--;
-                                        this.words.splice(this.round, 1);
-                                        return [4 /*yield*/, this.next()];
-                                    case 2:
-                                        _a.sent();
+                                        this.timeout = setTimeout(function () { return __awaiter(_this, void 0, void 0, function () {
+                                            var _this = this;
+                                            return __generator(this, function (_a) {
+                                                switch (_a.label) {
+                                                    case 0: return [4 /*yield*/, this.chat.send("\u63D0\u793A\uFF1A\u8BE5\u5355\u8BCD\u7684\u53D1\u97F3\u662F /" + dictionary[this.currentWord].phone + "/")];
+                                                    case 1:
+                                                        _a.sent();
+                                                        this.timeout = setTimeout(function () { return __awaiter(_this, void 0, void 0, function () {
+                                                            return __generator(this, function (_a) {
+                                                                switch (_a.label) {
+                                                                    case 0: return [4 /*yield*/, this.chat.send("30s\u5185\u6CA1\u6709\u4EBA\u7B54\u51FA\u6B63\u786E\u7B54\u6848\uFF1A " + this.currentWord)];
+                                                                    case 1:
+                                                                        _a.sent();
+                                                                        this.round--;
+                                                                        this.words.splice(this.round, 1);
+                                                                        return [4 /*yield*/, this.next()];
+                                                                    case 2:
+                                                                        _a.sent();
+                                                                        return [2 /*return*/];
+                                                                }
+                                                            });
+                                                        }); }, 10000);
+                                                        return [2 /*return*/];
+                                                }
+                                            });
+                                        }); }, 10000);
                                         return [2 /*return*/];
                                 }
                             });
-                        }); }, 20000);
+                        }); }, 10000);
                         setTimeout(function () { return __awaiter(_this, void 0, void 0, function () {
                             return __generator(this, function (_a) {
                                 switch (_a.label) {
@@ -106,7 +128,7 @@ var RaceGame = /** @class */ (function () {
                                         this.midfield = false;
                                         this.round++;
                                         return [4 /*yield*/, this.chat.send([
-                                                (0, miraipie_1.Plain)("\u7B2C(" + this.round + "/" + this.term + ")\u5C40\uFF0C\u65F6\u9650\uFF1A20s\n"),
+                                                (0, miraipie_1.Plain)("\u7B2C(" + this.round + "/" + this.term + ")\u5C40\uFF0C\u65F6\u9650\uFF1A30s\n"),
                                                 (0, miraipie_1.Plain)(dictionary[this.currentWord].trans.map(function (tr) { return "[" + tr.pos + "] " + tr.tranCn; }).join('\n') + '\n'),
                                                 (0, miraipie_1.Plain)("\u8BE5\u5355\u8BCD\u6709" + this.currentWord.length + "\u4E2A\u5B57\u6BCD"),
                                             ])];
@@ -133,7 +155,7 @@ var RaceGame = /** @class */ (function () {
                     case 1:
                         members = _a.sent();
                         scoreMap = score.map(function (s) { return [members.find(function (m) { return m.id === s[0]; }).memberName, s[1]]; });
-                        scoreMap.sort(function (a, b) { return a[0] > b[0] ? 1 : -1; });
+                        scoreMap.sort(function (a, b) { return a[0] < b[0] ? 1 : -1; });
                         chain = [(0, miraipie_1.Plain)('游戏结束，成绩排名：\n')];
                         if (scoreMap.length > 0)
                             chain.push((0, miraipie_1.Plain)("\uD83E\uDD47 " + scoreMap[0][0] + " - " + scoreMap[0][1]));

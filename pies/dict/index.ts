@@ -68,17 +68,23 @@ class RaceGame {
     async next(immediate: boolean = false) {
         if (!immediate) await this.chat.send('3s后开启下一轮');
         this.timeout = setTimeout(async () => {
-            await this.chat.send(`20s内没有人答出正确答案： ${this.currentWord}`);
-            this.round--;
-            this.words.splice(this.round, 1);
-            await this.next();
-        }, 20000);
+            await this.chat.send(`提示：该单词的第一个字母是 ${this.currentWord[0]}`);
+            this.timeout = setTimeout(async () => {
+                await this.chat.send(`提示：该单词的发音是 /${dictionary[this.currentWord].phone}/`);
+                this.timeout = setTimeout(async () => {
+                    await this.chat.send(`30s内没有人答出正确答案： ${this.currentWord}`);
+                    this.round--;
+                    this.words.splice(this.round, 1);
+                    await this.next();
+                }, 10000);
+            }, 10000);
+        }, 10000);
         setTimeout(async () => {
             if (!this.isOver) {
                 this.midfield = false;
                 this.round++;
                 await this.chat.send([
-                    Plain(`第(${this.round}/${this.term})局，时限：20s\n`),
+                    Plain(`第(${this.round}/${this.term})局，时限：30s\n`),
                     Plain(dictionary[this.currentWord].trans.map((tr) => `[${tr.pos}] ${tr.tranCn}`).join('\n') + '\n'),
                     Plain(`该单词有${this.currentWord.length}个字母`),
                 ]);
@@ -90,7 +96,7 @@ class RaceGame {
         const score = Array.from(this.score.entries());
         const members = await this.chat.getMemberList();
         const scoreMap = score.map((s) => [members.find((m) => m.id === s[0]).memberName, s[1]]);
-        scoreMap.sort((a, b) => a[0] > b [0] ? 1 : -1);
+        scoreMap.sort((a, b) => a[0] < b [0] ? 1 : -1);
         const chain = [Plain('游戏结束，成绩排名：\n')];
         if (scoreMap.length > 0) chain.push(Plain(`🥇 ${scoreMap[0][0]} - ${scoreMap[0][1]}`));
         if (scoreMap.length > 1) chain.push(Plain(`\n🥈 ${scoreMap[1][0]} - ${scoreMap[1][1]}`));
