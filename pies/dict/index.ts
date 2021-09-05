@@ -67,18 +67,6 @@ class RaceGame {
 
     async next(immediate: boolean = false) {
         if (!immediate) await this.chat.send('3s后开启下一轮');
-        this.timeout = setTimeout(async () => {
-            await this.chat.send(`提示：该单词的第一个字母是 ${this.currentWord[0]}`);
-            this.timeout = setTimeout(async () => {
-                await this.chat.send(`提示：该单词的发音是 /${dictionary[this.currentWord].phone}/`);
-                this.timeout = setTimeout(async () => {
-                    await this.chat.send(`30s内没有人答出正确答案： ${this.currentWord}`);
-                    this.round--;
-                    this.words.splice(this.round, 1);
-                    await this.next();
-                }, 10000);
-            }, 10000);
-        }, 10000);
         setTimeout(async () => {
             if (!this.isOver) {
                 this.midfield = false;
@@ -88,6 +76,19 @@ class RaceGame {
                     Plain(dictionary[this.currentWord].trans.map((tr) => `[${tr.pos}] ${tr.tranCn}`).join('\n') + '\n'),
                     Plain(`该单词有${this.currentWord.length}个字母`),
                 ]);
+
+                this.timeout = setTimeout(async () => {
+                    await this.chat.send(`提示：该单词的第一个字母是 ${this.currentWord[0]}`);
+                    this.timeout = setTimeout(async () => {
+                        await this.chat.send(`提示：该单词的发音是 /${dictionary[this.currentWord].phone}/`);
+                        this.timeout = setTimeout(async () => {
+                            await this.chat.send(`30s内没有人答出正确答案： ${this.currentWord}`);
+                            this.round--;
+                            this.words.splice(this.round, 1);
+                            await this.next();
+                        }, 10000);
+                    }, 10000);
+                }, 10000);
             }
         }, immediate ? 0 : 3000);
     }
@@ -130,7 +131,7 @@ module.exports = (ctx: MiraiPieApplication) => {
     ctx.pie(makePie({
         id: 'dict',
         name: '背单词',
-        version: '0.0.1',
+        version: '0.0.4',
         author: 'Nepsyn',
         data: {
             dictionary,
@@ -148,6 +149,9 @@ module.exports = (ctx: MiraiPieApplication) => {
                 .aliases(['单词', '辞书', '词典'])
                 .description('简单背单词工具')
                 .usage('dict <command> [...args]')
+                .action(async (args , chat, chain, command) => {
+                    await chat.send(command.help());
+                });
 
             dict
                 .command('search')
@@ -201,6 +205,13 @@ module.exports = (ctx: MiraiPieApplication) => {
                         await chat.send('没有正在进行中的竞赛');
                     }
                 });
+        },
+        disabled() {
+            Program.delete('dict');
+            for (const game of this.games.values()) {
+                game.cancel();
+            }
+            this.games.clear();
         }
-    }))
+    }));
 };

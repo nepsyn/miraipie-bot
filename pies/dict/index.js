@@ -35,6 +35,17 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __values = (this && this.__values) || function(o) {
+    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+    if (m) return m.call(o);
+    if (o && typeof o.length === "number") return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var command_1 = require("../command");
 var miraipie_1 = require("miraipie");
@@ -83,44 +94,8 @@ var RaceGame = /** @class */ (function () {
                         _a.sent();
                         _a.label = 2;
                     case 2:
-                        this.timeout = setTimeout(function () { return __awaiter(_this, void 0, void 0, function () {
-                            var _this = this;
-                            return __generator(this, function (_a) {
-                                switch (_a.label) {
-                                    case 0: return [4 /*yield*/, this.chat.send("\u63D0\u793A\uFF1A\u8BE5\u5355\u8BCD\u7684\u7B2C\u4E00\u4E2A\u5B57\u6BCD\u662F " + this.currentWord[0])];
-                                    case 1:
-                                        _a.sent();
-                                        this.timeout = setTimeout(function () { return __awaiter(_this, void 0, void 0, function () {
-                                            var _this = this;
-                                            return __generator(this, function (_a) {
-                                                switch (_a.label) {
-                                                    case 0: return [4 /*yield*/, this.chat.send("\u63D0\u793A\uFF1A\u8BE5\u5355\u8BCD\u7684\u53D1\u97F3\u662F /" + dictionary[this.currentWord].phone + "/")];
-                                                    case 1:
-                                                        _a.sent();
-                                                        this.timeout = setTimeout(function () { return __awaiter(_this, void 0, void 0, function () {
-                                                            return __generator(this, function (_a) {
-                                                                switch (_a.label) {
-                                                                    case 0: return [4 /*yield*/, this.chat.send("30s\u5185\u6CA1\u6709\u4EBA\u7B54\u51FA\u6B63\u786E\u7B54\u6848\uFF1A " + this.currentWord)];
-                                                                    case 1:
-                                                                        _a.sent();
-                                                                        this.round--;
-                                                                        this.words.splice(this.round, 1);
-                                                                        return [4 /*yield*/, this.next()];
-                                                                    case 2:
-                                                                        _a.sent();
-                                                                        return [2 /*return*/];
-                                                                }
-                                                            });
-                                                        }); }, 10000);
-                                                        return [2 /*return*/];
-                                                }
-                                            });
-                                        }); }, 10000);
-                                        return [2 /*return*/];
-                                }
-                            });
-                        }); }, 10000);
                         setTimeout(function () { return __awaiter(_this, void 0, void 0, function () {
+                            var _this = this;
                             return __generator(this, function (_a) {
                                 switch (_a.label) {
                                     case 0:
@@ -134,6 +109,43 @@ var RaceGame = /** @class */ (function () {
                                             ])];
                                     case 1:
                                         _a.sent();
+                                        this.timeout = setTimeout(function () { return __awaiter(_this, void 0, void 0, function () {
+                                            var _this = this;
+                                            return __generator(this, function (_a) {
+                                                switch (_a.label) {
+                                                    case 0: return [4 /*yield*/, this.chat.send("\u63D0\u793A\uFF1A\u8BE5\u5355\u8BCD\u7684\u7B2C\u4E00\u4E2A\u5B57\u6BCD\u662F " + this.currentWord[0])];
+                                                    case 1:
+                                                        _a.sent();
+                                                        this.timeout = setTimeout(function () { return __awaiter(_this, void 0, void 0, function () {
+                                                            var _this = this;
+                                                            return __generator(this, function (_a) {
+                                                                switch (_a.label) {
+                                                                    case 0: return [4 /*yield*/, this.chat.send("\u63D0\u793A\uFF1A\u8BE5\u5355\u8BCD\u7684\u53D1\u97F3\u662F /" + dictionary[this.currentWord].phone + "/")];
+                                                                    case 1:
+                                                                        _a.sent();
+                                                                        this.timeout = setTimeout(function () { return __awaiter(_this, void 0, void 0, function () {
+                                                                            return __generator(this, function (_a) {
+                                                                                switch (_a.label) {
+                                                                                    case 0: return [4 /*yield*/, this.chat.send("30s\u5185\u6CA1\u6709\u4EBA\u7B54\u51FA\u6B63\u786E\u7B54\u6848\uFF1A " + this.currentWord)];
+                                                                                    case 1:
+                                                                                        _a.sent();
+                                                                                        this.round--;
+                                                                                        this.words.splice(this.round, 1);
+                                                                                        return [4 /*yield*/, this.next()];
+                                                                                    case 2:
+                                                                                        _a.sent();
+                                                                                        return [2 /*return*/];
+                                                                                }
+                                                                            });
+                                                                        }); }, 10000);
+                                                                        return [2 /*return*/];
+                                                                }
+                                                            });
+                                                        }); }, 10000);
+                                                        return [2 /*return*/];
+                                                }
+                                            });
+                                        }); }, 10000);
                                         _a.label = 2;
                                     case 2: return [2 /*return*/];
                                 }
@@ -213,7 +225,7 @@ module.exports = function (ctx) {
     ctx.pie((0, miraipie_1.makePie)({
         id: 'dict',
         name: '背单词',
-        version: '0.0.1',
+        version: '0.0.4',
         author: 'Nepsyn',
         data: {
             dictionary: dictionary,
@@ -241,7 +253,17 @@ module.exports = function (ctx) {
                 .program('dict')
                 .aliases(['单词', '辞书', '词典'])
                 .description('简单背单词工具')
-                .usage('dict <command> [...args]');
+                .usage('dict <command> [...args]')
+                .action(function (args, chat, chain, command) { return __awaiter(_this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, chat.send(command.help())];
+                        case 1:
+                            _a.sent();
+                            return [2 /*return*/];
+                    }
+                });
+            }); });
             dict
                 .command('search')
                 .aliases(['s', '搜索'])
@@ -328,6 +350,24 @@ module.exports = function (ctx) {
                     }
                 });
             }); });
+        },
+        disabled: function () {
+            var e_1, _a;
+            command_1.Program.delete('dict');
+            try {
+                for (var _b = __values(this.games.values()), _c = _b.next(); !_c.done; _c = _b.next()) {
+                    var game = _c.value;
+                    game.cancel();
+                }
+            }
+            catch (e_1_1) { e_1 = { error: e_1_1 }; }
+            finally {
+                try {
+                    if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
+                }
+                finally { if (e_1) throw e_1.error; }
+            }
+            this.games.clear();
         }
     }));
 };

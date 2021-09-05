@@ -11,7 +11,7 @@ module.exports = (ctx) => {
             const random = Program
                 .program('random')
                 .description('随机生成器')
-                .usage('random [command] [args]')
+                .usage('random [command] [...args]')
                 .action(async (args, chat) => {
                     await chat.send(Math.random().toString());
                 });
