@@ -183,7 +183,7 @@ var RaceGame = /** @class */ (function () {
                     case 1:
                         members = _a.sent();
                         scoreMap = score.map(function (s) { return [members.find(function (m) { return m.id === s[0]; }).memberName, s[1]]; });
-                        scoreMap.sort(function (a, b) { return a[1] < b[1] ? 1 : -1; });
+                        scoreMap.sort(function (a, b) { return a[1] > b[1] ? 1 : -1; });
                         chain = [(0, miraipie_1.Plain)('游戏结束，成绩排名：\n')];
                         if (scoreMap.length > 0)
                             chain.push((0, miraipie_1.Plain)("\uD83E\uDD47 " + scoreMap[0][0] + " - " + scoreMap[0][1]));
@@ -240,7 +240,7 @@ module.exports = function (ctx) {
     ctx.pie((0, miraipie_1.makePie)({
         id: 'dict',
         name: '背单词',
-        version: '0.0.6',
+        version: '0.0.7',
         author: 'Nepsyn',
         data: {
             dictionary: dictionary,
