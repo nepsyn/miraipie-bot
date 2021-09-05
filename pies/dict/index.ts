@@ -43,26 +43,30 @@ class RaceGame {
     round: number;
     score: Map<number, number>;
     midfield: boolean;
-    timeout: Timeout;
+    timeouts: Timeout[];
+    isOver: boolean;
 
     constructor(public chat: GroupChat, public onOver: Function, public term: number = 10) {
         this.words = allWords.concat([]).sort(() => 0.5 - Math.random());
         this.round = 0;
         this.score = new Map();
         this.midfield = false;
+        this.timeouts = [];
+        this.isOver = false;
     }
 
     get currentWord() {
         return this.words[this.round - 1];
     }
 
-    get isOver() {
-        return this.round > this.term;
+    cancel() {
+        this.cancelRoundTimeouts();
+        this.isOver = true;
     }
 
-    cancel() {
-        if (this.timeout) clearTimeout(this.timeout);
-        this.round = this.term;
+    cancelRoundTimeouts() {
+        for (const timeout of this.timeouts) clearTimeout(timeout);
+        this.timeouts = [];
     }
 
     async next(immediate: boolean = false) {
@@ -74,30 +78,31 @@ class RaceGame {
                 await this.chat.send([
                     Plain(`第(${this.round}/${this.term})局，时限：30s\n`),
                     Plain(dictionary[this.currentWord].trans.map((tr) => `[${tr.pos}] ${tr.tranCn}`).join('\n') + '\n'),
-                    Plain(`该单词有${this.currentWord.length}个字母`),
+                    Plain(`该单词有${this.currentWord.length}个字母`)
                 ]);
 
-                this.timeout = setTimeout(async () => {
+                this.timeouts.push(setTimeout(async () => {
                     await this.chat.send(`提示：该单词的第一个字母是 ${this.currentWord[0]}`);
-                    this.timeout = setTimeout(async () => {
-                        await this.chat.send(`提示：该单词的发音是 /${dictionary[this.currentWord].phone}/`);
-                        this.timeout = setTimeout(async () => {
+                    this.timeouts.push(setTimeout(async () => {
+                        if (dictionary[this.currentWord].phone) await this.chat.send(`提示：该单词的发音是 /${dictionary[this.currentWord].phone}/`);
+                        this.timeouts.push(setTimeout(async () => {
                             await this.chat.send(`30s内没有人答出正确答案： ${this.currentWord}`);
                             this.round--;
                             this.words.splice(this.round, 1);
                             await this.next();
-                        }, 10000);
-                    }, 10000);
-                }, 10000);
+                        }, 10000));
+                    }, 10000));
+                }, 10000));
             }
         }, immediate ? 0 : 3000);
     }
 
     async over() {
+        this.isOver = true;
         const score = Array.from(this.score.entries());
         const members = await this.chat.getMemberList();
         const scoreMap = score.map((s) => [members.find((m) => m.id === s[0]).memberName, s[1]]);
-        scoreMap.sort((a, b) => a[0] < b [0] ? 1 : -1);
+        scoreMap.sort((a, b) => a[1] < b [1] ? 1 : -1);
         const chain = [Plain('游戏结束，成绩排名：\n')];
         if (scoreMap.length > 0) chain.push(Plain(`🥇 ${scoreMap[0][0]} - ${scoreMap[0][1]}`));
         if (scoreMap.length > 1) chain.push(Plain(`\n🥈 ${scoreMap[1][0]} - ${scoreMap[1][1]}`));
@@ -109,12 +114,12 @@ class RaceGame {
     }
 
     async validate(chat: GroupChat, chain: MessageChain) {
-        if (!this.midfield && !this.isOver) {
+        if (!(this.midfield || this.isOver)) {
             if (chain.selected('Plain').toDisplayString().trim() === this.words[this.round - 1]) {
+                this.midfield = true;
+                this.cancelRoundTimeouts();
                 this.score.set(chat.sender.id, (this.score.get(chat.sender.id) || 0) + 1);
                 await chat.send([At(chat.sender.id), Plain(` 回答正确！积分+1，当前共${this.score.get(chat.sender.id)}分`)]);
-                this.midfield = true;
-                if (this.timeout) clearTimeout(this.timeout);
                 if (this.round < this.term) {
                     await this.next();
                 } else {
@@ -131,7 +136,7 @@ module.exports = (ctx: MiraiPieApplication) => {
     ctx.pie(makePie({
         id: 'dict',
         name: '背单词',
-        version: '0.0.4',
+        version: '0.0.6',
         author: 'Nepsyn',
         data: {
             dictionary,
