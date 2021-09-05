@@ -102,7 +102,7 @@ class RaceGame {
         const score = Array.from(this.score.entries());
         const members = await this.chat.getMemberList();
         const scoreMap = score.map((s) => [members.find((m) => m.id === s[0]).memberName, s[1]]);
-        scoreMap.sort((a, b) => a[1] < b [1] ? 1 : -1);
+        scoreMap.sort((a, b) => a[1] > b [1] ? 1 : -1);
         const chain = [Plain('游戏结束，成绩排名：\n')];
         if (scoreMap.length > 0) chain.push(Plain(`🥇 ${scoreMap[0][0]} - ${scoreMap[0][1]}`));
         if (scoreMap.length > 1) chain.push(Plain(`\n🥈 ${scoreMap[1][0]} - ${scoreMap[1][1]}`));
@@ -136,7 +136,7 @@ module.exports = (ctx: MiraiPieApplication) => {
     ctx.pie(makePie({
         id: 'dict',
         name: '背单词',
-        version: '0.0.6',
+        version: '0.0.7',
         author: 'Nepsyn',
         data: {
             dictionary,
