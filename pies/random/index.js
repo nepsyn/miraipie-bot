@@ -1,4 +1,4 @@
-const {makePie} = require('miraipie');
+const {makePie, Dice} = require('miraipie');
 const {Program} = require('../command');
 
 module.exports = (ctx) => {
@@ -19,11 +19,10 @@ module.exports = (ctx) => {
             random
                 .command('roll')
                 .aliases(['r'])
-                .description('随机roll点数')
-                .usage('random roll [limit]\nlimit用于指定点数上限, 默认为1, roll出的值区间在[0, limit]')
+                .description('随机roll骰子')
                 .action(async (args, chat, chain) => {
-                    const limit = parseInt(args[0]) || 1;
-                    await chat.send(Math.round(Math.random() * limit).toString(), chain.sourceId);
+                    const value = Math.ceil(Math.random() * 6);
+                    await chat.send(Dice(value), chain.sourceId);
                 });
 
             random
