@@ -216,7 +216,7 @@ var RaceGame = /** @class */ (function () {
                         this.midfield = true;
                         this.cancelRoundTimeouts();
                         this.score.set(chat.sender.id, (this.score.get(chat.sender.id) || 0) + 1);
-                        return [4 /*yield*/, chat.send([(0, miraipie_1.At)(chat.sender.id), (0, miraipie_1.Plain)(" \u56DE\u7B54\u6B63\u786E\uFF01\u79EF\u5206+1\uFF0C\u5F53\u524D\u5171" + this.score.get(chat.sender.id) + "\u5206")])];
+                        return [4 /*yield*/, chat.send("\u56DE\u7B54\u6B63\u786E\uFF01\u79EF\u5206+1\uFF0C\u5F53\u524D\u5171" + this.score.get(chat.sender.id) + "\u5206", chain.sourceId)];
                     case 1:
                         _a.sent();
                         if (!(this.round < this.term)) return [3 /*break*/, 3];
@@ -298,11 +298,11 @@ module.exports = function (ctx) {
                             word = args[0];
                             if (!(word in this.dictionary)) return [3 /*break*/, 4];
                             info = this.dictionary[word];
-                            return [4 /*yield*/, chat.send(word + " /" + info.phone + "/\n" + info.trans.map(function (tr) { return "[" + tr.pos + "] " + tr.tranCn; }).join('\n'))];
+                            return [4 /*yield*/, chat.send(word + " /" + info.phone + "/\n" + info.trans.map(function (tr) { return "[" + tr.pos + "] " + tr.tranCn; }).join('\n'), chain.sourceId)];
                         case 3:
                             _a.sent();
                             return [3 /*break*/, 6];
-                        case 4: return [4 /*yield*/, chat.send("\u6CA1\u6709\u627E\u5230\u5355\u8BCD: " + word)];
+                        case 4: return [4 /*yield*/, chat.send("\u6CA1\u6709\u627E\u5230\u5355\u8BCD: " + word, chain.sourceId)];
                         case 5:
                             _a.sent();
                             _a.label = 6;
@@ -316,7 +316,7 @@ module.exports = function (ctx) {
                 .on(function (chat) { return chat.isGroupChat(); })
                 .usage('dict race [term]\nterm为局数, 默认十局')
                 .description('开启群内单词竞赛')
-                .action(function (args, chat) { return __awaiter(_this, void 0, void 0, function () {
+                .action(function (args, chat, chain) { return __awaiter(_this, void 0, void 0, function () {
                 var game;
                 var _this = this;
                 return __generator(this, function (_a) {
@@ -327,7 +327,7 @@ module.exports = function (ctx) {
                                 _this.games.delete(chat.contact.id);
                             }, parseInt(args[0]) || 10);
                             this.games.set(chat.contact.id, game);
-                            return [4 /*yield*/, chat.send("\u5355\u8BCD\u7ADE\u8D5B\u6E38\u620F\u5F00\u59CB, \u53D1\u9001" + command_1.Program.prefix + "dict race cancel\u53EF\u4EE5\u7ACB\u5373\u53D6\u6D88\u5DF2\u5F00\u59CB\u7684\u6E38\u620F")];
+                            return [4 /*yield*/, chat.send("\u5355\u8BCD\u7ADE\u8D5B\u6E38\u620F\u5F00\u59CB, \u53D1\u9001" + command_1.Program.prefix + "dict race cancel\u53EF\u4EE5\u7ACB\u5373\u53D6\u6D88\u5DF2\u5F00\u59CB\u7684\u6E38\u620F", chain.sourceId)];
                         case 1:
                             _a.sent();
                             return [4 /*yield*/, game.next(true)];
@@ -344,7 +344,7 @@ module.exports = function (ctx) {
                 .on(function (chat) { return chat.isGroupChat(); })
                 .usage('dict race cancel\nterm为局数, 默认十局')
                 .description('取消已开始的单词竞赛')
-                .action(function (args, chat) { return __awaiter(_this, void 0, void 0, function () {
+                .action(function (args, chat, chain) { return __awaiter(_this, void 0, void 0, function () {
                 var game;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -353,11 +353,11 @@ module.exports = function (ctx) {
                             game = this.games.get(chat.contact.id);
                             game.cancel();
                             this.games.delete(chat.contact.id);
-                            return [4 /*yield*/, chat.send('已取消竞赛')];
+                            return [4 /*yield*/, chat.send('已取消竞赛', chain.sourceId)];
                         case 1:
                             _a.sent();
                             return [3 /*break*/, 4];
-                        case 2: return [4 /*yield*/, chat.send('没有正在进行中的竞赛')];
+                        case 2: return [4 /*yield*/, chat.send('没有正在进行中的竞赛', chain.sourceId)];
                         case 3:
                             _a.sent();
                             _a.label = 4;

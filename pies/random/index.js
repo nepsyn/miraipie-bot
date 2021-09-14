@@ -12,8 +12,8 @@ module.exports = (ctx) => {
                 .program('random')
                 .description('随机生成器')
                 .usage('random [command] [...args]')
-                .action(async (args, chat) => {
-                    await chat.send(Math.random().toString());
+                .action(async (args, chat, chain) => {
+                    await chat.send(Math.random().toString(), chain.sourceId);
                 });
 
             random
@@ -21,9 +21,9 @@ module.exports = (ctx) => {
                 .aliases(['r'])
                 .description('随机roll点数')
                 .usage('random roll [limit]\nlimit用于指定点数上限, 默认为1, roll出的值区间在[0, limit]')
-                .action(async (args, chat) => {
+                .action(async (args, chat, chain) => {
                     const limit = parseInt(args[0]) || 1;
-                    await chat.send(Math.round(Math.random() * limit).toString());
+                    await chat.send(Math.round(Math.random() * limit).toString(), chain.sourceId);
                 });
 
             random
@@ -36,7 +36,7 @@ module.exports = (ctx) => {
                         await chat.send(command.help());
                         return;
                     }
-                    await chat.send(args[Math.floor(Math.random() * args.length)]);
+                    await chat.send(args[Math.floor(Math.random() * args.length)], chain.sourceId);
                 });
 
             random
@@ -45,10 +45,10 @@ module.exports = (ctx) => {
                 .aliases(['m'])
                 .description('随机选择群成员(除机器人)')
                 .usage('random member')
-                .action(async (args, chat) => {
+                .action(async (args, chat, chain) => {
                     const members = await ctx.api.getMemberList(chat.contact.id);
                     const names = members.data.filter((member) => member.id !== ctx.id).map((member) => member.memberName);
-                    await chat.send(names[Math.floor(Math.random() * names.length)]);
+                    await chat.send(names[Math.floor(Math.random() * names.length)], chain.sourceId);
                 });
         },
         disabled() {

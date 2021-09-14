@@ -14,16 +14,16 @@ module.exports = (ctx) => {
                 .aliases(['一言'])
                 .description('一言')
                 .usage('words')
-                .action(async (args, chat) => {
-                    await chat.send((await axios.get('https://api.vvhan.com/api/ian', {responseType: 'text'})).data);
+                .action(async (args, chat, chain) => {
+                    await chat.send((await axios.get('https://api.vvhan.com/api/ian', {responseType: 'text'})).data, chain.sourceId);
                 });
             words
                 .command('love')
                 .aliases(['情话'])
                 .description('土味情话')
                 .usage('words love')
-                .action(async (args, chat) => {
-                    await chat.send((await axios.get('https://api.vvhan.com/api/love', {responseType: 'text'})).data);
+                .action(async (args, chat, chain) => {
+                    await chat.send((await axios.get('https://api.vvhan.com/api/love', {responseType: 'text'})).data, chain.sourceId);
                 });
         },
         disabled() {

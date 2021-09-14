@@ -302,9 +302,9 @@ module.exports = (ctx: MiraiPieApplication) => {
                     if (args && args.length > 0) {
                         const command = Program.find(args);
                         if (command) {
-                            await chat.send(command.help());
+                            await chat.send(command.help(), chain.sourceId);
                         } else {
-                            await chat.send(`未知的命令, 发送 ${this.configs.prefix}help 查看所有指令`);
+                            await chat.send(`未知的命令, 发送 ${this.configs.prefix}help 查看所有指令`, chain.sourceId);
                         }
                     } else {
                         const commands = [];

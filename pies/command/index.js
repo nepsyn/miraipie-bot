@@ -437,11 +437,11 @@ module.exports = function (ctx) {
                             if (!(args && args.length > 0)) return [3 /*break*/, 5];
                             command = exports.Program.find(args);
                             if (!command) return [3 /*break*/, 2];
-                            return [4 /*yield*/, chat.send(command.help())];
+                            return [4 /*yield*/, chat.send(command.help(), chain.sourceId)];
                         case 1:
                             _d.sent();
                             return [3 /*break*/, 4];
-                        case 2: return [4 /*yield*/, chat.send("\u672A\u77E5\u7684\u547D\u4EE4, \u53D1\u9001 " + this.configs.prefix + "help \u67E5\u770B\u6240\u6709\u6307\u4EE4")];
+                        case 2: return [4 /*yield*/, chat.send("\u672A\u77E5\u7684\u547D\u4EE4, \u53D1\u9001 " + this.configs.prefix + "help \u67E5\u770B\u6240\u6709\u6307\u4EE4", chain.sourceId)];
                         case 3:
                             _d.sent();
                             _d.label = 4;

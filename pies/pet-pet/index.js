@@ -38,7 +38,7 @@ module.exports = (ctx) => {
                         ctx.drawImage(avatar, 0, 0, 200, 200);
                         span.set((await pet(round.toBuffer(), {delay: 20})).toString('base64'));
                     }
-                    await chat.send(makeImage({base64: span.get()}));
+                    await chat.send(makeImage({base64: span.get()}), chain.sourceId);
                 });
         },
         disabled() {

@@ -119,7 +119,7 @@ class RaceGame {
                 this.midfield = true;
                 this.cancelRoundTimeouts();
                 this.score.set(chat.sender.id, (this.score.get(chat.sender.id) || 0) + 1);
-                await chat.send([At(chat.sender.id), Plain(` 回答正确！积分+1，当前共${this.score.get(chat.sender.id)}分`)]);
+                await chat.send(`回答正确！积分+1，当前共${this.score.get(chat.sender.id)}分`, chain.sourceId);
                 if (this.round < this.term) {
                     await this.next();
                 } else {
@@ -171,9 +171,9 @@ module.exports = (ctx: MiraiPieApplication) => {
                     const word = args[0];
                     if (word in this.dictionary) {
                         const info = this.dictionary[word];
-                        await chat.send(`${word} /${info.phone}/\n` + info.trans.map((tr) => `[${tr.pos}] ${tr.tranCn}`).join('\n'));
+                        await chat.send(`${word} /${info.phone}/\n` + info.trans.map((tr) => `[${tr.pos}] ${tr.tranCn}`).join('\n'), chain.sourceId);
                     } else {
-                        await chat.send(`没有找到单词: ${word}`);
+                        await chat.send(`没有找到单词: ${word}`, chain.sourceId);
                     }
                 });
 
@@ -183,13 +183,13 @@ module.exports = (ctx: MiraiPieApplication) => {
                 .on((chat) => chat.isGroupChat())
                 .usage('dict race [term]\nterm为局数, 默认十局')
                 .description('开启群内单词竞赛')
-                .action(async (args, chat) => {
+                .action(async (args, chat, chain) => {
                     if (!this.games.has(chat.contact.id)) {
                         const game = new RaceGame(chat as GroupChat, () => {
                             this.games.delete(chat.contact.id);
                         }, parseInt(args[0]) || 10);
                         this.games.set(chat.contact.id, game);
-                        await chat.send(`单词竞赛游戏开始, 发送${Program.prefix}dict race cancel可以立即取消已开始的游戏`);
+                        await chat.send(`单词竞赛游戏开始, 发送${Program.prefix}dict race cancel可以立即取消已开始的游戏`, chain.sourceId);
                         await game.next(true);
                     }
                 });
@@ -200,14 +200,14 @@ module.exports = (ctx: MiraiPieApplication) => {
                 .on((chat) => chat.isGroupChat())
                 .usage('dict race cancel\nterm为局数, 默认十局')
                 .description('取消已开始的单词竞赛')
-                .action(async (args, chat) => {
+                .action(async (args, chat, chain) => {
                     if (this.games.has(chat.contact.id)) {
                         const game = this.games.get(chat.contact.id);
                         game.cancel();
                         this.games.delete(chat.contact.id);
-                        await chat.send('已取消竞赛');
+                        await chat.send('已取消竞赛', chain.sourceId);
                     } else {
-                        await chat.send('没有正在进行中的竞赛');
+                        await chat.send('没有正在进行中的竞赛', chain.sourceId);
                     }
                 });
         },
