@@ -28,7 +28,19 @@
 
 ## 如何使用
 
-先全局安装 miraipie：
+克隆本仓库：
+
+```shell
+git clone https://github.com/nepsyn/miraipie-bot.git
+```
+
+安装项目依赖：
+
+```shell
+npm install
+```
+
+全局安装 miraipie：
 
 ```shell
 npm install -g miraipie
