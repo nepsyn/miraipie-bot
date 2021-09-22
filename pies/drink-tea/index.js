@@ -24,10 +24,10 @@ module.exports = (ctx) => {
                     setTimeout(async () => {
                         await ctx.api.sendGroupMessage(group, [
                             makeImage({base64: picture.toString('base64')})
-                        ]);
+                        ], undefined);
                         await ctx.api.sendGroupMessage(group, [
                             makeVoice({base64: voice.toString('base64')})
-                        ]);
+                        ], undefined);
                     }, Math.round(Math.random()) * 5000);
                 }
             });

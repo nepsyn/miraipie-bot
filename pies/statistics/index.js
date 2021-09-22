@@ -82,7 +82,7 @@ module.exports = (ctx) => {
             cron('stat', '5 0 0 * * *', async () => {
                 for (const group of this.configs.groups || []) {
                     const chain = await this.makeStatMessage(group, 1);
-                    if (chain.length > 1) await ctx.api.sendGroupMessage(group, chain);
+                    if (chain.length > 1) await ctx.api.sendGroupMessage(group, chain, undefined);
                 }
             });
         },

@@ -1,0 +1,83 @@
+{
+    "qq": 123456789,
+    "adapterInUse": "mixed",
+    "logDirectory": "log",
+    "logLevel": "debug",
+    "verbose": true,
+    "adapters": {
+        "http": {
+            "configs": {
+                "verifyKey": "your verify key",
+                "host": "127.0.0.1",
+                "port": 23333
+            }
+        }
+    },
+    "pies": {
+        "miraipie-command": {
+            "module": "pies/command",
+            "enabled": true,
+            "configs": {
+                "prefix": "/"
+            }
+        },
+        "repeater": {
+            "module": "pies/repeater",
+            "enabled": false,
+            "configs": {}
+        },
+        "arcana": {
+            "module": "pies/arcana",
+            "enabled": true,
+            "configs": {}
+        },
+        "jrrp": {
+            "module": "pies/rp",
+            "enabled": true,
+            "configs": {}
+        },
+        "drink-tea": {
+            "module": "pies/drink-tea",
+            "enabled": true,
+            "configs": {
+                "groups": []
+            }
+        },
+        "pet-pet": {
+            "module": "pies/pet-pet",
+            "enabled": true,
+            "configs": {}
+        },
+        "words": {
+            "module": "pies/words",
+            "enabled": true,
+            "configs": {}
+        },
+        "statistics": {
+            "module": "pies/statistics",
+            "enabled": true,
+            "configs": {
+                "groups": []
+            }
+        },
+        "wb-hot": {
+            "module": "pies/wb-hot",
+            "enabled": true,
+            "configs": {}
+        },
+        "random": {
+            "module": "pies/random",
+            "enabled": true,
+            "configs": {}
+        },
+        "dict": {
+            "module": "pies/dict",
+            "enabled": true,
+            "configs": {}
+        }
+    },
+    "extensions": [
+        "pies/db",
+        "pies/friend-request"
+    ]
+}
