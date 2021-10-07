@@ -57,9 +57,9 @@ module.exports = (ctx) => {
                                     chain.push(Plain(`动画: ${data['source']} ${data['part']}`));
                                 } else {
                                     const {ext_urls, ...rest} = data;
-                                    chain.push(Plain('未知数据库'))
+                                    chain.push(Plain('未知数据库\n'))
                                     for (const key in rest) {
-                                        chain.push(Plain(`${key}: ${rest[key]}`));
+                                        chain.push(Plain(`${key}: ${rest[key]}\n`));
                                     }
                                 }
                                 await chat.send(chain);
