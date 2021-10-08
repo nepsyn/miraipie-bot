@@ -18,12 +18,12 @@ module.exports = (ctx) => {
         enabled() {
             Program
                 .program('pic')
-                .aliases(['search', '搜图'])
+                .aliases(['searchpic', '搜图'])
                 .description('搜索图片(当前支持Pixiv和动画)')
                 .usage('pic')
                 .action(async (args, chat, chain) => {
                     await chat.send('请发送要搜索的图片', chain.sourceId);
-                    chat.nextMessage().then(async (chain) => {
+                    chat.nextMessage(20000).then(async (chain) => {
                         const pic = chain.selected('Image').f;
                         if (pic && pic.isType('Image')) {
                             axios.get('https://saucenao.com/search.php', {
